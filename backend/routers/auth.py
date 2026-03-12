@@ -75,11 +75,22 @@ async def verify_email(token: str):
     user = await User.get(rec.user_id)
     if not user:
         raise HTTPException(404, "User not found")
-    user.is_verified = True
-    await user.save()
-    rec.used = True
-    await rec.save()
-    return {"message": "Email verified!"}
+
+    if rec.new_email:
+        # This is an email-change verification — apply the new email
+        user.email = rec.new_email
+        user.is_verified = True
+        await user.save()
+        rec.used = True
+        await rec.save()
+        return {"message": "Email updated and verified!"}
+    else:
+        # This is a signup verification
+        user.is_verified = True
+        await user.save()
+        rec.used = True
+        await rec.save()
+        return {"message": "Email verified!"}
 
 
 @router.post("/forgot-password")

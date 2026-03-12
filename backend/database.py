@@ -29,7 +29,7 @@ async def connect_db():
             EmailVerificationToken,
         ],
     )
-    print(f"✅ MongoDB connected — database: {DATABASE_NAME}")
+    print(f"MongoDB connected — database: {DATABASE_NAME}")
 
 
 async def disconnect_db():
